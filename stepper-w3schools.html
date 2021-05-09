@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+<style>
+  * {
+    box-sizing: border-box;
+    letter-spacing: 0.03em;
+    font-family: 'Noto Sans JP', sans-serif;
+
+  }
+
+  body {
+    background-color: #f1f1f1;
+  }
+
+  #regForm {
+    background-color: #ffffff;
+    margin: 0 auto;
+    /* width: 70%; */
+    max-width: 50rem;
+    border-radius: 5px;
+    overflow: hidden;
+
+  }
+
+  .mainRegContent {
+    padding: 30px;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 0 auto 0 auto;
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 1.3rem;
+    margin: 0 auto 0 auto;
+    color: #aaaaaa;
+  }
+
+  input[text] {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+  }
+
+  /* Mark input boxes that gets an error on validation: */
+  input.invalid {
+    background-color: #ffdddd;
+  }
+
+  /* Hide all steps by default: */
+  .tab {
+    display: none;
+  }
+
+  button {
+    background-color: #2d7af1;
+    color: #ffffff;
+    border: none;
+    padding: 7px 40px;
+    font-size: 17px;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px 0 rgb(76 81 101 / 20%);
+
+  }
+
+  button:hover {
+    background-color: #2669ce;
+    transition-duration: 100ms;
+  }
+
+  #prevBtn {
+    background-color: rgba(0,0,0,0);
+    box-shadow: none;
+    color: #808080;
+    padding: 0;
+  }
+
+  /* Make circles that indicate the steps of the form: */
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+
+  .step.active {
+    opacity: 1;
+  }
+
+  /* Mark the steps that are finished and valid: */
+  .step.finish {
+    background-color: #2d7af1;
+  }
+
+  .stepBar {
+    background-color: #2d7af1;
+    width: 50%;
+    height: 10px;
+    transition-duration: 300ms;
+  }
+
+  .formImg {
+    background-image: url("./teaching.jpg");
+    width: 100%;
+    height: 150px;
+    background-size: 100%;
+    background-position: center;
+  }
+
+  .buttonRow {
+    display: flex;
+    margin: 30px 0 0 0;
+    justify-content: flex-end;
+  }
+
+  .radioContainer input[type=radio] {
+    height: 20px;
+    width: 20px;
+    /* margin: 10px; */
+  }
+
+  .radioContainer p {
+    margin: 0px;
+  }
+
+  .radioHolder {
+    display: flex;
+    align-items: center;
+    margin: 10px
+  }
+
+  input[type="text"] {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: #eee;
+    width: 100%;
+    font-size: 17px;
+    padding: 15px;
+  }
+
+  .radioContainer input[type="text"] {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 13px;
+    margin: 8px 8px 8px 0;
+    box-shadow: 0 3px 6px 0 rgb(76 81 101 / 5%);
+  }
+
+  input[type="text"]:focus {
+    outline: none;
+  }
+
+  .radioContainer {
+    align-items: center;
+    display: flex;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border-style: solid;
+    border-color: rgb(226, 226, 226);
+    border-width: 1px;
+    border-top-width: 0;
+    color: #808080;
+    transition-duration: 150ms;
+  }
+
+
+  .radioContainer:first-child {
+    border-top-width: 1px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  .radioContainer:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .radioContainer:hover {
+    background-color: #f0f0f0;
+    transition-duration: 150ms;
+  }
+
+  .formAnswerSheet {
+    margin-top: 30px;
+  }
+
+  @media screen and (max-width: 500px) {
+    .mainRegContent {
+      padding: 30px 5px;
+      /* padding-top: 30px; */
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    h2 {
+      font-size: 1rem;
+    }
+
+    .formImg {
+      height: 100px;
+    }
+
+    .buttonRow {
+      margin: 20px 20px 0 20px;
+    }
+  }
+
+</style>
+
+<body>
+
+  <form id="regForm" action="https://docs.google.com/forms/d/e/1FAIpQLSd-KA3Tup4lw2yqhSGYa0Ghg0kx1F_8jDmBBVCuunsfcxHQww/formResponse" method="post">
+    <div class="stepBar"></div>
+    <div class="formImg"></div>
+    <div class="mainRegContent">
+      <!-- One "tab" for each step in the form: -->
+      <div class="tab">
+        <h1>Let's find you a lecturer!</h1>
+        <h2>Instantly find the best available lecturers</h2>
+        <div class="formAnswerSheet">
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="asap" name="entry.1076070129" value="I want to find a lecturer as soon as possible">
+            </div>
+              <p>I want to find a lecturer as soon as possible</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="fewDays" name="entry.1076070129" value="I am looking to find a lecturer within the next few days">
+            </div>
+              <p>I am looking to find a lecturer within the next few days</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="fewWeeks" name="entry.1076070129" value="I am looking to find a lecturer within the next few weeks">
+            </div>
+              <p>I am looking to find a lecturer within the next few weeks</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="iplan" name="entry.1076070129" value="I plan to hire a lecturer and am getting ideas of what options and prices are available">
+            </div>
+              <p>I plan to hire a lecturer and am getting ideas of what options and prices are available</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="mayhire" name="entry.1076070129" value="I want an idea of prices and may or may not hire a lecturer">
+            </div>
+              <p>I want an idea of prices and may or may not hire a lecturer</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="otherLooking" name="entry.1076070129" value="__other_option__">
+            </div>
+            <input onfocus="document.getElementById('otherLooking').checked=true" for="other" id="other" type="text" placeholder="Other" name="entry.1076070129.other_option_response">
+          </label>
+        </div>
+      </div>
+      <div class="tab">
+        <h1>What needs to be taught?</h1>
+        <div class="formAnswerSheet">
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="algorithms" name="entry.118803716" value="Algorithms">
+            </div>
+            <p>Algorithms</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="oop" name="entry.118803716" value="Object Oriented Programming">
+            </div>
+            <p>Object Oriented Programming</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="discreteMath" name="entry.118803716" value="Discrete Mathematics">
+            </div>
+            <p>Discrete Mathematics</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="databases" name="entry.118803716" value="Databases">
+            </div>
+            <p>Databases</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="otherTaught" name="entry.118803716" value="__other_option__">
+            </div>
+            <input onfocus="document.getElementById('otherTaught').checked=true" for="other" id="other" type="text" placeholder="Other" name="entry.118803716.other_option_response">
+          </label>
+        </div>
+      </div>
+      <div class="tab">
+        <h1>How often should they teach?</h1>
+        <div class="formAnswerSheet">
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="moreThanOnce" name="entry.1242240986" value="More than once a week">
+            </div>
+            <p>More than once a week</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="weekly" name="entry.1242240986" value="Weekly">
+            </div>
+            <p>Weekly</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="onceOrTwice" name="entry.1242240986" value="Once or twice a month">
+            </div>
+            <p>Once or twice a month</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="notSure" name="entry.1242240986" value="I'm not sure ye">
+            </div>
+            <p>I'm not sure yet</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="discuss" name="entry.1242240986" value="I would like to discuss with the lecturer">
+            </div>
+            <p>I would like to discuss with the lecturer</p>
+          </label>
+          <label class="radioContainer">
+            <div class="radioHolder">
+              <input type="radio" id="otherOften" name="entry.1242240986" value="__other_option__">
+            </div>
+            <input onfocus="document.getElementById('otherOften').checked=true" for="other" id="other" type="text" placeholder="Other" name="entry.1242240986.other_option_response">
+          </label>
+        </div>
+      </div>
+      <div class="tab">
+        <h1>Where do you need the lecturer?</h1>
+        <div class="formAnswerSheet"> 
+          <input type="text" placeholder="Enter your postcode" name="entry.411715244">
+        </div>
+      </div>
+      <!-- <div class="tab">Contact Info:
+        <p><input placeholder="E-mail..." oninput="this.className = ''" name="email"></p>
+        <p><input placeholder="Phone..." oninput="this.className = ''" name="phone"></p>
+      </div> 
+      <div class="tab">Birthday:
+        <p><input placeholder="dd" oninput="this.className = ''" name="dd"></p>
+        <p><input placeholder="mm" oninput="this.className = ''" name="nn"></p>
+        <p><input placeholder="yyyy" oninput="this.className = ''" name="yyyy"></p>
+      </div>
+      <div class="tab">Login Info:
+        <p><input placeholder="Username..." oninput="this.className = ''" name="uname"></p>
+        <p><input placeholder="Password..." oninput="this.className = ''" name="pword" type="password"></p>
+      </div> -->
+      <div style="overflow:auto;">
+        <div class="buttonRow">
+          <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+          <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+        </div>
+      </div>
+      <!-- Circles which indicates the steps of the form: -->
+      <!-- <div style="text-align:center;margin-top:40px;">
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+      </div> -->
+    </div>
+  </form>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+  <script>
+    var currentTab = 0; // Current tab is set to be the first tab (0)
+    showTab(currentTab); // Display the current tab
+
+    $(document).on("keypress", function(e){
+      console.log(e);
+        if(e.which == 13){
+          nextPrev(1);
+        }
+    });
+
+    function showTab(n) {
+      // This function will display the specified tab of the form...
+      var x = document.getElementsByClassName("tab");
+      currentStepBar(n);
+      x[n].style.display = "block";
+      //... and fix the Previous/Next buttons:
+      if (n == 0) {
+        document.getElementById("prevBtn").style.display = "none";
+        document.getElementsByClassName("buttonRow")[0].style.justifyContent = "flex-end";
+      } else {
+        document.getElementById("prevBtn").style.display = "inline";
+        // console.log(getElementByClassName(:v))
+        document.getElementsByClassName("buttonRow")[0].style.justifyContent = "space-between";
+      }
+      if (n == (x.length - 1)) {
+        document.getElementById("nextBtn").innerHTML = "Submit";
+      } else {
+        document.getElementById("nextBtn").innerHTML = "Next";
+      }
+      //... and run a function that will display the correct step indicator:
+      // fixStepIndicator(n)
+    }
+
+    function currentStepBar(n) {
+      var stepSize, pages = document.getElementsByClassName("tab").length;
+      stepSize = 100/pages;
+      console.log(stepSize);
+      document.getElementsByClassName("stepBar")[0].style.width = (n+1)*stepSize + "%";
+    }
+
+    function nextPrev(n) {
+      // This function will figure out which tab to display
+      var x = document.getElementsByClassName("tab");
+      // Exit the function if any field in the current tab is invalid:
+      if (n == 1 && !validateForm()) return false;
+      // Hide the current tab:
+      x[currentTab].style.display = "none";
+      // Increase or decrease the current tab by 1:
+      currentTab = currentTab + n;
+      // if you have reached the end of the form...
+      if (currentTab >= x.length) {
+        // ... the form gets submitted:
+        document.getElementById("regForm").submit();
+        return false;
+      }
+      // Otherwise, display the correct tab:
+      showTab(currentTab);
+    }
+
+    function validateForm() {
+      // This function deals with validation of the form fields
+      var x, y, i, valid = true;
+      x = document.getElementsByClassName("tab");
+      y = x[currentTab].getElementsByTagName("input");
+      // A loop that checks every input field in the current tab:
+      for (i = 0; i < y.length; i++) {
+        // If a field is empty...
+        if (y[i].value == "") {
+          // add an "invalid" class to the field:
+          y[i].className += " invalid";
+          // and set the current valid status to false
+          valid = false;
+        }
+
+        // Check if anything is selected, if other is select (item -2) do not override previous validity
+        if (y[i].checked && i != y.length-2) {
+          console.log("eeeeeeeeee")
+          return true;
+        }
+      }
+      // If the valid status is true, mark the step as finished and valid:
+      // if (valid) {
+      //   document.getElementsByClassName("step")[currentTab].className += " finish";
+      // }
+      return valid; // return the valid status
+    }
+
+    function fixStepIndicator(n) {
+      // This function removes the "active" class of all steps...
+      var i, x = document.getElementsByClassName("step");
+      console.log(x);
+      for (i = 0; i < x.length; i++) {
+        x[i].className = x[i].className.replace(" active", "");
+      }
+      //... and adds the "active" class on the current step:
+      x[n].className += " active";
+    }
+  </script>
+
+</body>
+
+</html>
