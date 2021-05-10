@@ -224,6 +224,15 @@
     }
   }
 
+  .check {
+    padding: 30px;
+    height: 150px;
+    width: 150px;
+    background-color:rgb(245, 245, 245);
+    border-radius: 10rem;
+    margin: 50px auto 20px auto;
+  }
+
 </style>
 
 <body>
@@ -357,6 +366,14 @@
           <input type="text" placeholder="Enter your postcode" name="entry.411715244">
         </div>
       </div>
+      <div class="tab">
+        <h1>You're all done. We'll be in touch shortly.</h1>
+        <div class="check">
+          <svg version="1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" enable-background="new 0 0 48 48">
+            <polygon fill="#43A047" points="40.6,12.1 17,35.7 7.4,26.1 4.6,29 17,41.3 43.4,14.9"/>
+          </svg>
+        </div>
+      </div>
       <!-- <div class="tab">Contact Info:
         <p><input placeholder="E-mail..." oninput="this.className = ''" name="email"></p>
         <p><input placeholder="Phone..." oninput="this.className = ''" name="phone"></p>
@@ -413,10 +430,18 @@
         // console.log(getElementByClassName(:v))
         document.getElementsByClassName("buttonRow")[0].style.justifyContent = "space-between";
       }
-      if (n == (x.length - 1)) {
+      if (n == (x.length - 2)) {
+        document.getElementById("nextBtn").style.display = "inline";
+        document.getElementById("prevBtn").innerHTML = "Previous";
         document.getElementById("nextBtn").innerHTML = "Submit";
-      } else {
+      } else if (n == (x.length - 1)) {
+        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("prevBtn").innerHTML = "Close";
+      }
+        else {
+        document.getElementById("nextBtn").style.display = "inline";
         document.getElementById("nextBtn").innerHTML = "Next";
+        document.getElementById("prevBtn").innerHTML = "Previous";
       }
       //... and run a function that will display the correct step indicator:
       // fixStepIndicator(n)
@@ -439,11 +464,11 @@
       // Increase or decrease the current tab by 1:
       currentTab = currentTab + n;
       // if you have reached the end of the form...
-      if (currentTab >= x.length) {
+      if (currentTab >= x.length - 1) {
         // ... the form gets submitted:
         // document.getElementById("regForm").submit();
         bypassSubmitted();
-        return false;
+        // return false;
       }
       // Otherwise, display the correct tab:
       showTab(currentTab);
@@ -466,7 +491,6 @@
 
         // Check if anything is selected, if other is select (item -2) do not override previous validity
         if (y[i].checked && i != y.length-2) {
-          console.log("eeeeeeeeee")
           return true;
         }
       }
@@ -490,28 +514,9 @@
 
     // https://dev.to/utkarshdhiman48/custom-frontend-for-google-form-456l
     let url = "https://docs.google.com/forms/d/e/1FAIpQLSd-KA3Tup4lw2yqhSGYa0Ghg0kx1F_8jDmBBVCuunsfcxHQww/formResponse"; //action url
-    let form = document.querySelector("#regForm"); //form element
-
-    form.addEventListener("submit", (e)=>{
-      console.log("hello")
-        e.preventDefault();//prevent default behaviour
-
-        fetch(url,{
-            method: "POST",
-            mode: "no-cors",
-            header:{
-                'Content-Type': 'application/json'
-                },
-            body: new FormData(document.querySelector('#regForm'))
-        })
-        .then(data=>{
-            console.log(data);
-            alert("Form Submitted");
-        })
-        .catch(err=>console.error(err)); //promise based
-    });
 
     function bypassSubmitted() {
+      var formData = new FormData(document.querySelector('#regForm')); 
 
       fetch(url,{
           method: "POST",
@@ -519,26 +524,14 @@
           header:{
               'Content-Type': 'application/json'
               },
-          body: new FormData(document.querySelector('#regForm'))
+          body: formData
       })
       .then(data=>{
-          console.log(data);
+          console.log(formData);
           alert("Form Submitted");
       })
       .catch(err=>console.error(err)); //promise based
     }
-
-    // //populating input data
-    // function getInputData(){
-    //       let dataToPost = new FormData(); //formdata API
-
-    //       //fill name attributes to corresponding values
-    //       dataToPost.append("entry.1076070129","I want to find a lecturer as soon as possible");
-    //       dataToPost.append("entry.118803716", "Discrete Mathematics");
-    //       dataToPost.append("entry.1242240986", "Once or twice a month");
-    //       dataToPost.append("entry.411715244", "SUCCESS");
-    //     return dataToPost;
-    // }
 
 </script>
 
