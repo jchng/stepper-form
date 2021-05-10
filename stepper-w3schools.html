@@ -228,7 +228,7 @@
 
 <body>
 
-  <form id="regForm" action="https://docs.google.com/forms/d/e/1FAIpQLSd-KA3Tup4lw2yqhSGYa0Ghg0kx1F_8jDmBBVCuunsfcxHQww/formResponse" method="post">
+  <form id="regForm">
     <div class="stepBar"></div>
     <div class="formImg"></div>
     <div class="mainRegContent">
@@ -441,7 +441,8 @@
       // if you have reached the end of the form...
       if (currentTab >= x.length) {
         // ... the form gets submitted:
-        document.getElementById("regForm").submit();
+        // document.getElementById("regForm").submit();
+        bypassSubmitted();
         return false;
       }
       // Otherwise, display the correct tab:
@@ -486,7 +487,60 @@
       //... and adds the "active" class on the current step:
       x[n].className += " active";
     }
-  </script>
+
+    // https://dev.to/utkarshdhiman48/custom-frontend-for-google-form-456l
+    let url = "https://docs.google.com/forms/d/e/1FAIpQLSd-KA3Tup4lw2yqhSGYa0Ghg0kx1F_8jDmBBVCuunsfcxHQww/formResponse"; //action url
+    let form = document.querySelector("#regForm"); //form element
+
+    form.addEventListener("submit", (e)=>{
+      console.log("hello")
+        e.preventDefault();//prevent default behaviour
+
+        fetch(url,{
+            method: "POST",
+            mode: "no-cors",
+            header:{
+                'Content-Type': 'application/json'
+                },
+            body: new FormData(document.querySelector('#regForm'))
+        })
+        .then(data=>{
+            console.log(data);
+            alert("Form Submitted");
+        })
+        .catch(err=>console.error(err)); //promise based
+    });
+
+    function bypassSubmitted() {
+
+      fetch(url,{
+          method: "POST",
+          mode: "no-cors",
+          header:{
+              'Content-Type': 'application/json'
+              },
+          body: new FormData(document.querySelector('#regForm'))
+      })
+      .then(data=>{
+          console.log(data);
+          alert("Form Submitted");
+      })
+      .catch(err=>console.error(err)); //promise based
+    }
+
+    // //populating input data
+    // function getInputData(){
+    //       let dataToPost = new FormData(); //formdata API
+
+    //       //fill name attributes to corresponding values
+    //       dataToPost.append("entry.1076070129","I want to find a lecturer as soon as possible");
+    //       dataToPost.append("entry.118803716", "Discrete Mathematics");
+    //       dataToPost.append("entry.1242240986", "Once or twice a month");
+    //       dataToPost.append("entry.411715244", "SUCCESS");
+    //     return dataToPost;
+    // }
+
+</script>
 
 </body>
 
